@@ -26,8 +26,8 @@ module Kaminari::Helpers
     # because the default template uses Rails 3-ish `<%=` + block syntax that can't be rendered
     # with pure ERB.
     class ActionViewTemplateProxy < ActionView::Base
-      def initialize(current_path: nil, param_name: nil, current_params: nil)
-        super()
+      def initialize(lookup_context, assigns, controller, current_path: nil, param_name: nil, current_params: nil)
+        super(lookup_context, assigns, controller)
 
         @current_path = current_path
         @param_name = param_name || Kaminari.config.page_method_name
@@ -91,7 +91,14 @@ module Kaminari::Helpers
         current_path = env['PATH_INFO'] rescue nil
         current_params = Rack::Utils.parse_query(env['QUERY_STRING']).symbolize_keys rescue {}
 
-        template = ActionViewTemplateProxy.new current_params: current_params, current_path: current_path, param_name: options[:param_name] || Kaminari.config.param_name
+        template = ActionViewTemplateProxy.with_empty_template_cache.new(
+          ActionView::LookupContext.new(ActionView::ViewPaths.all_view_paths),
+          {},
+          nil,
+          current_params: current_params,
+          current_path: current_path,
+          param_name: options[:param_name] || Kaminari.config.param_name,
+        )
 
         kwargs = {template: template}.merge(options)
         super(scope, **kwargs)
