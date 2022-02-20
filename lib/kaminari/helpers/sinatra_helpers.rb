@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'active_support/isolated_execution_state' # https://github.com/rails/rails/issues/43851
 require 'active_support/core_ext/object'
 require 'active_support/core_ext/string'
 require 'padrino-helpers'
