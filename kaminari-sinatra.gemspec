@@ -29,6 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3'
   spec.add_dependency 'kaminari-core', '~> 1.0'
   spec.add_dependency 'sinatra'
-  spec.add_dependency 'actionview'
+  spec.add_dependency 'actionview', '> 6'
   spec.add_dependency 'padrino-helpers'
 end
